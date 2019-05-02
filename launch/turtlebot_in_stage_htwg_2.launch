@@ -8,7 +8,11 @@
   <arg name="3d_sensor"  default="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro -->
 
   <!-- Name of the map to use (without path nor extension) and initial position -->
+  <arg name="map_file"       default=" $(env TURTLEBOT_STAGE_MAP_FILE)"/> <!-- robopark_plan -->
   <arg name="world_file"     default=" $(env TURTLEBOT_STAGE_WORLD_FILE)"/>
+  <arg name="initial_pose_x" default="2.0"/>
+  <arg name="initial_pose_y" default="2.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
 
   <param name="/use_sim_time" value="true"/>
   <!--  ******************** Stage ********************  -->
@@ -44,7 +48,26 @@
     <param name="use_gui" value="false"/>
   </node>
 
+  <!--  ****** Maps *****  -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="/map"/>
+  </node>
+
+  <include file="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml">
+    <arg name="scan_topic" value="scan"/>
+    <arg name="use_map_topic" value="true"/>
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+
   <!--  ******* Turtlebot Highlevel Controller *******  -->
   <rosparam command="load" file="$(find turtlebot_highlevel_controller)/config/default.yaml" />
   <node name="turtlebot_highlevel_controller" pkg="turtlebot_highlevel_controller" type="turtlebot_highlevel_controller_node" output="screen"/>
+  
+  <!--  ************ Visualization **************  -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_highlevel_controller)/config/default.rviz"/>
+
+  <!--  ************* Teleop Twist Keyboard *************** -->
+  <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py"/>
 </launch>

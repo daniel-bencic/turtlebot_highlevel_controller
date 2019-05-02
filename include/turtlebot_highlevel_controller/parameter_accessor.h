@@ -5,11 +5,11 @@
 
 #include <ros/ros.h>
 
-namespace thc {
-        class parameter_accessor {
+namespace turtlebot_highlevel_controller {
+        class ParameterAccessor {
                 public:
-                        parameter_accessor(ros::NodeHandle& nh);
-                        ~parameter_accessor();
+                        ParameterAccessor(ros::NodeHandle& nh);
+                        ~ParameterAccessor();
                         
                         template <typename T>
                         T get_parameter(const std::string& name) const;
@@ -18,12 +18,12 @@ namespace thc {
                         ros::NodeHandle nh;
         };
 
-        parameter_accessor::parameter_accessor(ros::NodeHandle& nh) : nh(nh) {}
+        ParameterAccessor::ParameterAccessor(ros::NodeHandle& nh) : nh(nh) {}
 
-        parameter_accessor::~parameter_accessor() {}
+        ParameterAccessor::~ParameterAccessor() {}
 
         template <typename T>
-        T parameter_accessor::get_parameter(const std::string& name) const
+        T ParameterAccessor::get_parameter(const std::string& name) const
         {
                 T val;
                 if (!this->nh.getParam(name, val)) {

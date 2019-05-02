@@ -135,7 +135,9 @@ include_directories(
 add_executable(${PROJECT_NAME}_node 
                src/turtlebot_highlevel_controller_node.cc
                src/turtlebot_highlevel_controller.cc
-               src/topic_subsciber_laser_scan.cc)
+               src/laser_scan_subscriber.cc
+               src/laser_scan_publisher.cc
+               src/algorithm/laser_scan_util.cc)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

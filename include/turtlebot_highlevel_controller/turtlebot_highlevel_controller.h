@@ -3,19 +3,21 @@
 
 #include <std_msgs/String.h>
 
-#include "./topic_subscriber_laser_scan.h"
+#include "./laser_scan_subscriber.h"
+#include "./laser_scan_publisher.h"
 
-namespace thc
+namespace turtlebot_highlevel_controller
 {
-        class turtlebot_highlevel_controller
+        class TurtlebotHighlevelController
         {
                 public:
-                        turtlebot_highlevel_controller(ros::NodeHandle& nh);
-                        ~turtlebot_highlevel_controller();
+                        TurtlebotHighlevelController(ros::NodeHandle& nh);
+                        ~TurtlebotHighlevelController();
+                        void publish_filtered_laser_scan() const;
 
                 private:
-                        topic_subscriber_laser_scan top_sub;
-
+                        LaserScanSubscriber laser_scan_sub;
+                        LaserScanPublisher laser_scan_pub;
         };
 }
 

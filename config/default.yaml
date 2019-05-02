@@ -1,3 +1,4 @@
 turtlebot_highlevel_controller:
-        topic: 'scan'
+        sub_topic: 'scan'
+        pub_topic: 'filtered_scan'
         queue_size: 1

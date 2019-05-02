@@ -7,9 +7,14 @@ int main(int argc, char *argv[])
         ros::init(argc, argv, "turtlebot_highlevel_controller");
 
         ros::NodeHandle nh("/");
-        thc::turtlebot_highlevel_controller ctrl(nh);
+        turtlebot_highlevel_controller::TurtlebotHighlevelController ctrl(nh);
 
-        ros::spin();
+        ros::Rate r(10);
+        while (ros::ok()) {
+                ros::spinOnce();
+                ctrl.publish_filtered_laser_scan();
+                r.sleep();
+        }
 
         return 0;
 }
