@@ -7,18 +7,23 @@
 #include <sensor_msgs/LaserScan.h>
 
 namespace turtlebot_highlevel_controller {
+        /*
+         * Class for publishing LaserScan Messages
+         * http://docs.ros.org/melodic/api/sensor_msgs/html/msg/LaserScan.html
+         */
         class LaserScanPublisher {
                 public:
                         LaserScanPublisher();
                         LaserScanPublisher(ros::NodeHandle nh,
                                            const std::string& topic,
                                            uint32_t queue_size);
-                        void publish(const sensor_msgs::LaserScan& scan) const;
                         ~LaserScanPublisher();
+                        void publish(const sensor_msgs::LaserScan& scan) const;
 
                 private:
                         ros::Publisher pub;
         };
 }
 
-#endif
+#endif /* LASER_SCAN_PUBLISHER_H */
+

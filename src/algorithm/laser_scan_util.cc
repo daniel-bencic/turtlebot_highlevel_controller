@@ -5,12 +5,21 @@
 
 namespace turtlebot_highlevel_controller {
         namespace util {
+                /*
+                 * This function takes a LaserScan message and returns the smallest distance
+                 * measured.
+                 */
                 float smallest_dist(sensor_msgs::LaserScan& scan)
                 {
                         std::vector<float>::iterator it = std::min_element(std::begin(scan.ranges), std::end(scan.ranges));
                         return *it;
                 }
-
+                
+                /*
+                 * This function takes a LaserScan message and returns a new LaserScan message, 
+                 * which contains the smallest distance measurement and the two measurements
+                 * before and after.
+                 */
                 sensor_msgs::LaserScan filter_scan(sensor_msgs::LaserScan& scan)
                 {
                         if (scan.ranges.empty()) return scan;

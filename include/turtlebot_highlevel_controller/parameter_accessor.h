@@ -6,6 +6,9 @@
 #include <ros/ros.h>
 
 namespace turtlebot_highlevel_controller {
+        /*
+         * Class for accessing the ROS parameter server.
+         */
         class ParameterAccessor {
                 public:
                         ParameterAccessor(ros::NodeHandle& nh);
@@ -33,5 +36,4 @@ namespace turtlebot_highlevel_controller {
         }
 }
 
-#endif
-
+#endif /* PARAMETER_ACCESSOR_H */

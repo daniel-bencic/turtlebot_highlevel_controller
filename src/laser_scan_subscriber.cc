@@ -2,7 +2,7 @@
 #include "../include/turtlebot_highlevel_controller/algorithm/laser_scan_util.h"
 
 namespace turtlebot_highlevel_controller {
-        sensor_msgs::LaserScan l;
+        sensor_msgs::LaserScan g_latest_scan;
         
         LaserScanSubscriber::LaserScanSubscriber() {}
 
@@ -21,16 +21,11 @@ namespace turtlebot_highlevel_controller {
         }
 
         LaserScanSubscriber::~LaserScanSubscriber() {}
-        
-        sensor_msgs::LaserScan LaserScanSubscriber::get_latest_scan() const
-        {
-                return this->latest_scan;
-        }
 
         void LaserScanSubscriber::callback(const sensor_msgs::LaserScan& msg)
         {
                 sensor_msgs::LaserScan scan = msg;
-                l = scan;
+                g_latest_scan = scan;
                 ROS_INFO_STREAM("Smallest range: " << util::smallest_dist(scan));
         }
 }

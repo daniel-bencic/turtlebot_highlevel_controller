@@ -8,12 +8,15 @@
 
 namespace turtlebot_highlevel_controller
 {
+        /*
+         * Main class of this package.
+         */
         class TurtlebotHighlevelController
         {
                 public:
                         TurtlebotHighlevelController(ros::NodeHandle& nh);
                         ~TurtlebotHighlevelController();
-                        void publish_filtered_laser_scan() const;
+                        void publish_filtered_laser_scan();
 
                 private:
                         LaserScanSubscriber laser_scan_sub;

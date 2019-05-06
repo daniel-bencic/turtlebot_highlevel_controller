@@ -21,9 +21,9 @@ namespace turtlebot_highlevel_controller
 
         TurtlebotHighlevelController::~TurtlebotHighlevelController() {}
 
-        void TurtlebotHighlevelController::publish_filtered_laser_scan() const
+        void TurtlebotHighlevelController::publish_filtered_laser_scan()
         {
-                sensor_msgs::LaserScan filtered_scan = util::filter_scan(l);
+                sensor_msgs::LaserScan filtered_scan = util::filter_scan(g_latest_scan);
                 this->laser_scan_pub.publish(filtered_scan);
         }
 }
