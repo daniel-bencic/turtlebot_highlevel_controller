@@ -9,9 +9,11 @@ namespace turtlebot_highlevel_controller {
                  * This function takes a LaserScan message and returns the smallest distance
                  * measured.
                  */
-                float smallest_dist(sensor_msgs::LaserScan& scan)
+                float smallest_range(std::vector<float>& ranges)
                 {
-                        std::vector<float>::iterator it = std::min_element(std::begin(scan.ranges), std::end(scan.ranges));
+                        if (ranges.empty()) return -1.0f;
+
+                        std::vector<float>::iterator it = std::min_element(std::begin(ranges), std::end(ranges));
                         return *it;
                 }
                 
@@ -56,7 +58,19 @@ namespace turtlebot_highlevel_controller {
                         f_scan.intensities = std::vector<float>(itfib, itfie + 1);
                         f_scan.angle_min = f_scan.angle_min + (itfrb - itrb) * f_scan.angle_increment;
                         f_scan.angle_max = f_scan.angle_max - (itre - itfre - 1) * f_scan.angle_increment;
-                        return f_scan;
+                        return f_scan;        
+                }
+
+                /*
+                 * This function return true of an obstacle has been detected by the laser scan,
+                 * false otherwise.
+                 */
+                bool obstacle_detected(std::vector<float>& intensities)
+                {
+                        if (intensities.empty()) return false;
+
+                        std::vector<float>::iterator it = std::max_element(std::begin(intensities), std::end(intensities));
+                        return *it == 0.0f ? true : false;
                 }
         }
 }

@@ -1,4 +1,5 @@
 turtlebot_highlevel_controller:
-        sub_topic: 'scan'
-        pub_topic: 'filtered_scan'
+        scan_sub_topic: 'scan'
+        filtered_scan_pub_topic: 'filtered_scan'
+        twist_pub_topic: 'cmd_vel'
         queue_size: 1

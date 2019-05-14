@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
         while (ros::ok()) {
                 ros::spinOnce();
                 ctrl.publish_filtered_laser_scan();
+                ctrl.find_pillar();
                 r.sleep();
         }
 
