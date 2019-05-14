@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cmath>
 
 #include "../../include/turtlebot_highlevel_controller/algorithm/laser_scan_util.h"
 #include <ros/ros.h>
@@ -9,12 +10,15 @@ namespace turtlebot_highlevel_controller {
                  * This function takes a LaserScan message and returns the smallest distance
                  * measured.
                  */
-                float smallest_range(std::vector<float>& ranges)
+                PolarPoint closest_point(std::vector<float>& ranges, float angle_min, float angle_increment)
                 {
-                        if (ranges.empty()) return -1.0f;
+                        PolarPoint p;
+                        if (ranges.empty()) return p;
 
                         std::vector<float>::iterator it = std::min_element(std::begin(ranges), std::end(ranges));
-                        return *it;
+                        p.dist = *it;
+                        p.angle = angle_min + (it - std::begin(ranges)) * angle_increment;
+                        return p;
                 }
                 
                 /*
@@ -71,6 +75,14 @@ namespace turtlebot_highlevel_controller {
 
                         std::vector<float>::iterator it = std::max_element(std::begin(intensities), std::end(intensities));
                         return *it == 0.0f ? true : false;
+                }
+
+                /*
+                 * This function converts polar coordinates to cartesian coordinates.
+                 */
+                CartesianPoint polar_to_cartesian(PolarPoint p)
+                {
+                        return CartesianPoint(p.dist * std::cos(p.angle), p.dist * std::sin(p.angle));
                 }
         }
 }

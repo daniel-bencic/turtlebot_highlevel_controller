@@ -5,15 +5,18 @@
 
 #include <sensor_msgs/LaserScan.h>
 
+#include "../cartesian_point.h"
+#include "../polar_point.h"
+
 namespace turtlebot_highlevel_controller {
         /*
          * Utility functions for LaserScan messages.
          */
         namespace util {
-                float smallest_range(std::vector<float>& ranges);
+                PolarPoint closest_point(std::vector<float>& ranges, float angle_min, float angle_increment);
                 sensor_msgs::LaserScan filter_scan(sensor_msgs::LaserScan& scan);
                 bool obstacle_detected(std::vector<float>& intensities);
-                std::vector<float> polar_to_cartesian(std::vector<float>& coords);
+                CartesianPoint polar_to_cartesian(PolarPoint p);
         }
 }
 

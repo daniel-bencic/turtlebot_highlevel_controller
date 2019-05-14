@@ -2,4 +2,5 @@ turtlebot_highlevel_controller:
         scan_sub_topic: 'scan'
         filtered_scan_pub_topic: 'filtered_scan'
         twist_pub_topic: 'cmd_vel'
+        marker_pub_topic: 'marker_pillar'
         queue_size: 1
