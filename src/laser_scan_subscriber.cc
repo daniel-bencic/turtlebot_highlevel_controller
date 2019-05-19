@@ -26,6 +26,5 @@ namespace turtlebot_highlevel_controller {
         {
                 sensor_msgs::LaserScan scan = msg;
                 g_latest_scan = scan;
-                ROS_INFO_STREAM("Smallest range: " << util::closest_point(scan.ranges, scan.angle_min, scan.angle_increment).dist);
         }
 }

@@ -492,6 +492,14 @@ Visualization Manager:
                   {}
       Update Interval: 0
       Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /marker_pillar
+      Name: Marker
+      Namespaces:
+        turtlebot_highlevel_controller: true
+      Queue Size: 100
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -517,7 +525,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 12.56618595123291
+      Distance: 13.775052070617676
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -532,10 +540,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7953970432281494
+      Pitch: 1.1803966760635376
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.8285634517669678
+      Yaw: 1.333551287651062
     Saved: ~
 Window Geometry:
   Displays:

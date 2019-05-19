@@ -4,3 +4,7 @@ turtlebot_highlevel_controller:
         twist_pub_topic: 'cmd_vel'
         marker_pub_topic: 'marker_pillar'
         queue_size: 1
+        base_linear_speed: 0.25
+        base_angular_speed: 0.25
+        p_factor: 0.01
+        stopping_dist: 0.3

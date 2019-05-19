@@ -66,7 +66,7 @@ namespace turtlebot_highlevel_controller {
                 }
 
                 /*
-                 * This function return true of an obstacle has been detected by the laser scan,
+                 * This function returns true of an obstacle has been detected by the laser scan,
                  * false otherwise.
                  */
                 bool obstacle_detected(std::vector<float>& intensities)
@@ -74,7 +74,7 @@ namespace turtlebot_highlevel_controller {
                         if (intensities.empty()) return false;
 
                         std::vector<float>::iterator it = std::max_element(std::begin(intensities), std::end(intensities));
-                        return *it == 0.0f ? true : false;
+                        return *it == 1.0f ? true : false;
                 }
 
                 /*
@@ -83,6 +83,14 @@ namespace turtlebot_highlevel_controller {
                 CartesianPoint polar_to_cartesian(PolarPoint p)
                 {
                         return CartesianPoint(p.dist * std::cos(p.angle), p.dist * std::sin(p.angle));
+                }
+
+                /*
+                 * This function returns the position of the first measurement hitting and obstacle.
+                 */
+                int first_hit(std::vector<float> intensities)
+                {
+                        return std::find(std::begin(intensities), std::end(intensities), 1.0) - std::begin(intensities);
                 }
         }
 }

@@ -17,6 +17,7 @@ namespace turtlebot_highlevel_controller {
                 sensor_msgs::LaserScan filter_scan(sensor_msgs::LaserScan& scan);
                 bool obstacle_detected(std::vector<float>& intensities);
                 CartesianPoint polar_to_cartesian(PolarPoint p);
+                int first_hit(std::vector<float> intensities);
         }
 }
 
