@@ -4,9 +4,8 @@
 
 namespace turtlebot_highlevel_controller
 {
-        TurtlebotHighlevelController::TurtlebotHighlevelController() 
+        TurtlebotHighlevelController::TurtlebotHighlevelController(ros::NodeHandle& nh, tf::TransformListener* lis) :nh(nh), lis(lis) 
         {
-                this->nh = ros::NodeHandle("/");
                 ParameterAccessor pa(this->nh);
                 std::string s_sub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/scan_sub_topic");
                 std::string fs_pub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/filtered_scan_pub_topic");
@@ -67,6 +66,8 @@ namespace turtlebot_highlevel_controller
 
         void TurtlebotHighlevelController::publish_pillar_marker()
         {
+                if (!this->pillar_found) return;
+
                 PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.angle_min, g_latest_scan.angle_increment);
                 CartesianPoint cp = util::polar_to_cartesian(pp);
                 
@@ -84,20 +85,33 @@ namespace turtlebot_highlevel_controller
 
         void TurtlebotHighlevelController::publish_pillar_marker_transformed()
         {
+                if (!this->pillar_found) return;
+
                 tf::StampedTransform transform;
                 try {
-                        this->lis.lookupTransform("/base_laser_link", "odom", ros::Time(0), transform);
+                        (*this->lis).lookupTransform("/odom", "/base_laser_link", ros::Time(0), transform);
                 } catch (tf::TransformException &ex) {
-                        ROS_ERROR_STREAM("Looking up transformation: failed!");
+                        ROS_ERROR_STREAM("Looking up transformation: failed!\n Message: " << ex.what());
+                        ros::Duration(1.0).sleep();
                 }
 
                 PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.angle_min, g_latest_scan.angle_increment);
                 CartesianPoint cp = util::polar_to_cartesian(pp);
                 
+                geometry_msgs::PointStamped p_in;
+                p_in.header.frame_id = "base_laser_link";
+                p_in.header.stamp = ros::Time(0);
+                p_in.point.x = cp.x;
+                p_in.point.y = cp.y;
+                p_in.point.z = cp.z;
+
+                geometry_msgs::PointStamped p_out;
+                (*this->lis).transformPoint("odom", p_in, p_out);
+
                 geometry_msgs::Point p;
-                p.x = cp.x;
-                p.y = cp.x;
-                p.z = cp.z;
+                p.x = p_out.point.x;
+                p.y = p_out.point.y;
+                p.z = p_out.point.z;
 
                 std_msgs::ColorRGBA color;
                 color.g = 5.0f;
