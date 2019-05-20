@@ -11,6 +11,7 @@ namespace turtlebot_highlevel_controller
                 std::string fs_pub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/filtered_scan_pub_topic");
                 std::string t_pub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/twist_pub_topic");
                 std::string m_pub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/marker_pub_topic");
+                std::string m_t_pub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/marker_transformed_pub_topic");
                 int queue_size = pa.get_parameter<int>("/turtlebot_highlevel_controller/queue_size");
 
                 this->base_linear_speed = pa.get_parameter<float>("/turtlebot_highlevel_controller/base_linear_speed");
@@ -30,6 +31,9 @@ namespace turtlebot_highlevel_controller
 
                 this->marker_pub =
                         Publisher<visualization_msgs::Marker>(nh, m_pub_topic, queue_size);
+
+                this->marker_transformed_pub =
+                        Publisher<visualization_msgs::Marker>(nh, m_t_pub_topic, queue_size);
         }
 
         TurtlebotHighlevelController::~TurtlebotHighlevelController() {}
@@ -117,7 +121,7 @@ namespace turtlebot_highlevel_controller
                 color.g = 5.0f;
                 color.a = 0.8f;
 
-                this->marker_pub.publish(this->create_marker("odom", 1, p, color));
+                this->marker_transformed_pub.publish(this->create_marker("odom", 1, p, color));
         }
 
         float TurtlebotHighlevelController::adjust_movement()

@@ -36,6 +36,7 @@ namespace turtlebot_highlevel_controller
                         Publisher<sensor_msgs::LaserScan> laser_scan_pub;
                         Publisher<geometry_msgs::Twist> twist_pub;
                         Publisher<visualization_msgs::Marker> marker_pub;
+                        Publisher<visualization_msgs::Marker> marker_transformed_pub;
                         bool pillar_found;
                         float base_linear_speed;
                         float base_angular_speed;

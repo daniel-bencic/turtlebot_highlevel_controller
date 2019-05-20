@@ -3,6 +3,7 @@ turtlebot_highlevel_controller:
         filtered_scan_pub_topic: 'filtered_scan'
         twist_pub_topic: 'cmd_vel'
         marker_pub_topic: 'marker_pillar'
+        marker_transformed_pub_topic: 'marker_transformed_pillar'
         queue_size: 1
         base_linear_speed: 0.25
         base_angular_speed: 0.25
