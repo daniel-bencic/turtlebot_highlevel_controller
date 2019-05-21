@@ -10,10 +10,11 @@ namespace turtlebot_highlevel_controller {
                  * This function takes a LaserScan message and returns the smallest distance
                  * measured.
                  */
-                PolarPoint closest_point(std::vector<float>& ranges, float angle_min, float angle_increment)
+                PolarPoint closest_point(std::vector<float>& ranges, std::vector<float>& intensities,
+                                         float angle_min, float angle_increment)
                 {
-                        PolarPoint p;
-                        if (ranges.empty()) return p;
+                        PolarPoint p(-1.0f, 0.0f);
+                        if (ranges.empty() || !obstacle_detected(intensities)) return p;
 
                         std::vector<float>::iterator it = std::min_element(std::begin(ranges), std::end(ranges));
                         p.dist = *it;
@@ -83,14 +84,6 @@ namespace turtlebot_highlevel_controller {
                 CartesianPoint polar_to_cartesian(PolarPoint p)
                 {
                         return CartesianPoint(p.dist * std::cos(p.angle), p.dist * std::sin(p.angle));
-                }
-
-                /*
-                 * This function returns the position of the first measurement hitting and obstacle.
-                 */
-                int first_hit(std::vector<float> intensities)
-                {
-                        return std::find(std::begin(intensities), std::end(intensities), 1.0) - std::begin(intensities);
                 }
         }
 }

@@ -63,7 +63,7 @@
 
   <!--  ******* Turtlebot Highlevel Controller *******  -->
   <rosparam command="load" file="$(find turtlebot_highlevel_controller)/config/default.yaml" />
-  <node name="turtlebot_highlevel_controller" pkg="turtlebot_highlevel_controller" type="turtlebot_highlevel_controller_node" output="screen"/>
+  <node launch-prefix="kitty -e gdb --args" name="turtlebot_highlevel_controller" pkg="turtlebot_highlevel_controller" type="turtlebot_highlevel_controller_node" output="screen"/>
   
   <!--  ************ Visualization **************  -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_highlevel_controller)/config/default.rviz"/>

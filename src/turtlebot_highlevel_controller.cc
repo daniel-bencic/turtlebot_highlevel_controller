@@ -4,7 +4,7 @@
 
 namespace turtlebot_highlevel_controller
 {
-        TurtlebotHighlevelController::TurtlebotHighlevelController(ros::NodeHandle& nh, tf::TransformListener* lis) :nh(nh), lis(lis) 
+        TurtlebotHighlevelController::TurtlebotHighlevelController(ros::NodeHandle& nh) :nh(nh) 
         {
                 ParameterAccessor pa(this->nh);
                 std::string s_sub_topic = pa.get_parameter<std::string>("/turtlebot_highlevel_controller/scan_sub_topic");
@@ -51,15 +51,19 @@ namespace turtlebot_highlevel_controller
                 geometry_msgs::Twist t;
 
                 if (!this->pillar_found) {
-                        int first_hit = util::first_hit(g_latest_scan.intensities);
-                        int mid = g_latest_scan.intensities.size() / 2;
-                        if (first_hit > mid - 50 && first_hit < mid + 50) {
+                        PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.intensities,
+                                                            g_latest_scan.angle_min, g_latest_scan.angle_increment);
+                        ROS_INFO_STREAM("pp: " << pp.dist);
+                        ROS_INFO_STREAM("pp: " << pp.angle);
+                        if (pp.dist != -1 && pp.angle > -1 && pp.angle < 1) {
+                                ROS_INFO_STREAM("found");
                                 this->pillar_found = true;
                         } else {
                                 t.angular.z = this->base_angular_speed;
                         }
                 } else {
-                        if (util::closest_point(g_latest_scan.ranges, g_latest_scan.angle_min, g_latest_scan.angle_increment).dist > this->stopping_dist) {
+                        if (util::closest_point(g_latest_scan.ranges, g_latest_scan.intensities,
+                                                g_latest_scan.angle_min, g_latest_scan.angle_increment).dist > this->stopping_dist) {
                                 t.linear.x = this->base_linear_speed;
                                 t.angular.z = this->adjust_movement();
                         }
@@ -72,7 +76,8 @@ namespace turtlebot_highlevel_controller
         {
                 if (!this->pillar_found) return;
 
-                PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.angle_min, g_latest_scan.angle_increment);
+                PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.intensities,
+                                                    g_latest_scan.angle_min, g_latest_scan.angle_increment);
                 CartesianPoint cp = util::polar_to_cartesian(pp);
                 
                 geometry_msgs::Point p;
@@ -91,15 +96,8 @@ namespace turtlebot_highlevel_controller
         {
                 if (!this->pillar_found) return;
 
-                tf::StampedTransform transform;
-                try {
-                        (*this->lis).lookupTransform("/odom", "/base_laser_link", ros::Time(0), transform);
-                } catch (tf::TransformException &ex) {
-                        ROS_ERROR_STREAM("Looking up transformation: failed!\n Message: " << ex.what());
-                        ros::Duration(1.0).sleep();
-                }
-
-                PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.angle_min, g_latest_scan.angle_increment);
+                PolarPoint pp = util::closest_point(g_latest_scan.ranges, g_latest_scan.intensities,
+                                                    g_latest_scan.angle_min, g_latest_scan.angle_increment);
                 CartesianPoint cp = util::polar_to_cartesian(pp);
                 
                 geometry_msgs::PointStamped p_in;
@@ -110,7 +108,7 @@ namespace turtlebot_highlevel_controller
                 p_in.point.z = cp.z;
 
                 geometry_msgs::PointStamped p_out;
-                (*this->lis).transformPoint("odom", p_in, p_out);
+                this->lis.transformPoint("odom", p_in, p_out);
 
                 geometry_msgs::Point p;
                 p.x = p_out.point.x;
@@ -126,9 +124,11 @@ namespace turtlebot_highlevel_controller
 
         float TurtlebotHighlevelController::adjust_movement()
         {
-                int error = (g_latest_scan.intensities.size() / 2) - util::first_hit(g_latest_scan.intensities);
-                float adj = error * this->p_factor;
-                return -adj;
+                PolarPoint p = util::closest_point(g_latest_scan.ranges, g_latest_scan.intensities,
+                                                   g_latest_scan.angle_min, g_latest_scan.angle_increment);
+                ROS_INFO_STREAM("angle: " << p.angle);
+                float adj = p.angle * this->p_factor;
+                return adj;
         }
 
         visualization_msgs::Marker TurtlebotHighlevelController::create_marker(std::string frame, int id,

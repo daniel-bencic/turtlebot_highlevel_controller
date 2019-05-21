@@ -7,5 +7,5 @@ turtlebot_highlevel_controller:
         queue_size: 1
         base_linear_speed: 0.25
         base_angular_speed: 0.25
-        p_factor: 0.01
+        p_factor: 1
         stopping_dist: 0.3

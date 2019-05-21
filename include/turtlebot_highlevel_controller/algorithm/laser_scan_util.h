@@ -13,12 +13,13 @@ namespace turtlebot_highlevel_controller {
          * Utility functions for LaserScan messages.
          */
         namespace util {
-                PolarPoint closest_point(std::vector<float>& ranges, float angle_min, float angle_increment);
+                PolarPoint closest_point(std::vector<float>& ranges,
+                                         std::vector<float>& intensities,
+                                         float angle_min, float angle_increment);
                 sensor_msgs::LaserScan filter_scan(sensor_msgs::LaserScan& scan);
                 bool obstacle_detected(std::vector<float>& intensities);
                 CartesianPoint polar_to_cartesian(PolarPoint p);
-                int first_hit(std::vector<float> intensities);
-        }
+       }
 }
 
 #endif /* LASER_SCAN_UTIL_H */

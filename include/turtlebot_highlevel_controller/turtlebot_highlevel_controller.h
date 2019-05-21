@@ -18,7 +18,7 @@ namespace turtlebot_highlevel_controller
         class TurtlebotHighlevelController
         {
                 public:
-                        TurtlebotHighlevelController(ros::NodeHandle& nh, tf::TransformListener* tf);
+                        TurtlebotHighlevelController(ros::NodeHandle& nh);
                         ~TurtlebotHighlevelController();
                         void publish_filtered_laser_scan();
                         void move_to_pillar();
@@ -43,7 +43,7 @@ namespace turtlebot_highlevel_controller
                         float p_factor;
                         float stopping_dist;
                         ros::NodeHandle nh;
-                        tf::TransformListener* lis;
+                        tf::TransformListener lis;
         };
 }
 

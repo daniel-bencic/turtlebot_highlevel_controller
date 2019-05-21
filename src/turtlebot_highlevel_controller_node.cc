@@ -7,8 +7,7 @@ int main(int argc, char *argv[])
         ros::init(argc, argv, "turtlebot_highlevel_controller");
 
         ros::NodeHandle nh("/");
-        tf::TransformListener lis;
-        turtlebot_highlevel_controller::TurtlebotHighlevelController ctrl(nh, &lis);
+        turtlebot_highlevel_controller::TurtlebotHighlevelController ctrl(nh);
 
         ros::Rate r(10);
         while (ros::ok()) {
